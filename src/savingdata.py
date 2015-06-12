@@ -10,6 +10,7 @@ class Create(object):
         self.h5filename = filename + '.h5'
         self.jsonfilename = filename + '.json'
 
+        print("Debug: creating file {}".format(self.h5filename))
         self.h5file = df.HDF5File(df.mpi_comm_world(), self.h5filename, 'w')
 
         self.field_index = 0
@@ -43,6 +44,12 @@ class Create(object):
                 self.functionspace.ufl_element().value_shape()[0]
         elif isinstance(self.functionspace, df.FunctionSpace):
             self.fieldsDict[field_name]['metadata']['type'] = 'scalar'
+
+        # Adding some debug data
+        self.fieldsDict[field_name]['metadata']['mpi-size'] = \
+            df.MPI.size(df.mpi_comm_world())
+        self.fieldsDict[field_name]['metadata']['mpi-rank'] = \
+            df.MPI.rank(df.mpi_comm_world())
 
         self.dump_metadata(self.jsonfilename, self.fieldsDict)
 
