@@ -17,9 +17,7 @@ class SavingData(object):
 
         self.fieldsDict = {}
 
-        with open(self.jsonfilename, 'w') as jsonfile:
-            json.dump(self.fieldsDict, jsonfile)
-        jsonfile.close()
+        self.dump_metadata(self.jsonfilename, self.fieldsDict)
 
     def save_mesh(self, name='mesh'):
         self.h5file.write(self.functionspace.mesh(), name)
@@ -40,11 +38,16 @@ class SavingData(object):
         self.fieldsDict[field_name]['metadata']['degree'] = self.functionspace.ufl_element().degree()
         self.fieldsDict[field_name]['metadata']['dim'] = self.functionspace.ufl_element().value_shape()[0]
 
-        with open(self.jsonfilename, 'w') as jsonfile:
-            json.dump(self.fieldsDict, jsonfile)
-        jsonfile.close()
+        self.dump_metadata(self.jsonfilename, self.fieldsDict)
 
         self.field_index += 1
+
+    def dump_metadata(self, filename, data):
+        # create json file
+        with open(filename, 'w') as jsonfile:
+            json.dump(data, jsonfile)
+        jsonfile.close()
+
 
     def close(self):
         self.h5file.close()
