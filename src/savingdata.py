@@ -4,11 +4,11 @@ from collections import OrderedDict
 import dolfin as df
 
 
-class SavingData(object):
-    def __init__(self, h5filename, jsonfilename, functionspace):
+class Create(object):
+    def __init__(self, filename, functionspace):
         self.functionspace = functionspace
-        self.h5filename = h5filename
-        self.jsonfilename = jsonfilename
+        self.h5filename = filename + '.h5'
+        self.jsonfilename = filename + '.json'
 
         self.h5file = df.HDF5File(df.mpi_comm_world(), self.h5filename, 'w')
 
@@ -58,10 +58,10 @@ class SavingData(object):
         self.h5file.close()
 
 
-class LoadingData(object):
-    def __init__(self, h5filename, jsonfilename):
-        self.h5filename = h5filename
-        self.jsonfilename = jsonfilename
+class Read(object):
+    def __init__(self, filename):
+        self.h5filename = filename + '.h5'
+        self.jsonfilename = filename + '.json'
 
         self.h5file = df.HDF5File(df.mpi_comm_world(), self.h5filename, 'r')
 

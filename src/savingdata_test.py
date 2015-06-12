@@ -4,20 +4,17 @@ from collections import OrderedDict
 import numpy as np
 import dolfin as df
 
-from savingdata import SavingData, LoadingData
+from savingdata import Create, Read
 
-h5filename = 'file.h5'
-jsonfilename = 'file.json'
 mesh = df.UnitSquareMesh(10, 10)
 t_array = np.linspace(0, 1e-9, 5)
 
 def test_save_vector_field_data():
-    h5filename = 'file_vector.h5'
-    jsonfilename = 'file_vector.json'
+    filename = 'file_vector'
     functionspace = df.VectorFunctionSpace(mesh, 'CG', 1, 3)
     f = df.Function(functionspace)
 
-    sd = SavingData(h5filename, jsonfilename, functionspace)
+    sd = Create(filename, functionspace)
 
     sd.save_mesh()
 
@@ -29,12 +26,11 @@ def test_save_vector_field_data():
     sd.close()
 
 def test_save_scalar_field_data():
-    h5filename = 'file_scalar.h5'
-    jsonfilename = 'file_scalar.json'
+    filename = 'file_scalar'
     functionspace = df.FunctionSpace(mesh, 'CG', 1)
     f = df.Function(functionspace)
 
-    sd = SavingData(h5filename, jsonfilename, functionspace)
+    sd = Create(filename, functionspace)
 
     sd.save_mesh()
 
@@ -47,12 +43,11 @@ def test_save_scalar_field_data():
 
 
 def test_load_vector_data():
-    h5filename = 'file_vector.h5'
-    jsonfilename = 'file_vector.json'
+    filename = 'file_vector'
     functionspace = df.VectorFunctionSpace(mesh, 'CG', 1, 3)
     f = df.Function(functionspace)
 
-    ld = LoadingData(h5filename, jsonfilename)
+    ld = Read(filename)
 
     for t in t_array:
         f_loaded = ld.load_field('f', t)
@@ -64,12 +59,11 @@ def test_load_vector_data():
 
 
 def test_load_scalar_data():
-    h5filename = 'file_scalar.h5'
-    jsonfilename = 'file_scalar.json'
+    filename = 'file_scalar'
     functionspace = df.FunctionSpace(mesh, 'CG', 1)
     f = df.Function(functionspace)
 
-    ld = LoadingData(h5filename, jsonfilename)
+    ld = Read(filename)
 
     for t in t_array:
         f_loaded = ld.load_field('f', t)
