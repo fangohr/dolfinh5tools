@@ -75,16 +75,19 @@ class LoadingData(object):
 
         self.mesh = self.load_mesh()
 
+        self.fs_type = fieldsDict[field_name]['metadata']['type']
         self.family = fieldsDict[field_name]['metadata']['family']
         self.degree = fieldsDict[field_name]['metadata']['degree']
-        self.dim = fieldsDict[field_name]['metadata']['dim']
-        self.fs_type = fieldsDict[field_name]['metadata']['type']
         
+        print self.family, self.degree
         if self.fs_type == 'vector':
+            self.dim = fieldsDict[field_name]['metadata']['dim']
             self.functionspace = df.VectorFunctionSpace(self.mesh, self.family,
                                                         self.degree, self.dim)
         elif self.fs_type == 'scalar':
-            self.functionspace = df.FunctionSpace(self.mesh, self.family, self.degree)
+            print self.family, self.degree
+            print type(self.family)
+            self.functionspace = df.FunctionSpace(self.mesh, str(self.family), self.degree)
 
         name = str([item[0] for item in fieldsDict[field_name]['data'].items() if item[1]==t][0])
         
