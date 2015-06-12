@@ -16,7 +16,7 @@ class Create(object):
         self.h5filename = filename + '.h5'
         self.jsonfilename = filename + '.json'
 
-        print("Debug: creating file {}".format(self.h5filename))
+        print("Debug: ({}/{}) opening file {}".format(mpi_rank, mpi_size, self.h5filename))
         self.h5file = df.HDF5File(df.mpi_comm_world(), self.h5filename, 'w')
 
         self.field_index = 0
