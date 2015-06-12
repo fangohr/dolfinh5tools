@@ -19,7 +19,7 @@ class SavingData(object):
 
         # create json file
         with open(self.jsonfilename, 'w') as jsonfile:
-            json.dump(self.fieldsDict, jsonfile, sort_keys=False)
+            json.dump(self.fieldsDict, jsonfile)
         jsonfile.close()
 
     def save_mesh(self, name='mesh'):
@@ -39,7 +39,7 @@ class SavingData(object):
         self.fieldsDict['dim'] = self.functionspace.ufl_element().value_shape()[0]
 
         with open(self.jsonfilename, 'w') as jsonfile:
-            json.dump(self.fieldsDict, jsonfile, sort_keys=False)
+            json.dump(self.fieldsDict, jsonfile)
         jsonfile.close()
 
         self.field_index += 1
