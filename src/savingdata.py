@@ -1,8 +1,9 @@
-import dolfin as df
-import numpy as np
 import json
 from collections import OrderedDict
 
+import numpy as np
+
+import dolfin as df
 
 class SavingData(object):
     def __init__(self, h5filename, jsonfilename, functionspace):
@@ -92,3 +93,4 @@ class LoadingData(object):
 
     def close(self):
         self.h5file.close()
+
