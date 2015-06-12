@@ -60,10 +60,12 @@ class Create(object):
         self.field_index += 1
 
     def dump_metadata(self, filename, data):
-        # create json file
-        with open(filename, 'w') as jsonfile:
-            json.dump(data, jsonfile, indent=True)
-        jsonfile.close()
+        # create json file (only master)
+        if is_master:
+            print("Debug: ({}/{}) writing json file {}".format(mpi_rank, mpi_size, filename))
+            with open(filename, 'w') as jsonfile:
+                json.dump(data, jsonfile, indent=True)
+            jsonfile.close()
 
     def close(self):
         self.h5file.close()
