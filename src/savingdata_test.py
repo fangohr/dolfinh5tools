@@ -1,8 +1,11 @@
-import dolfin as df
-import numpy as np
 import json
 from collections import OrderedDict
+
+import numpy as np
+import dolfin as df
+
 from savingdata import SavingData, LoadingData
+
 
 h5filename = 'file.h5'
 jsonfilename = 'file.json'
