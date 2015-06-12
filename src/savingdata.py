@@ -6,9 +6,12 @@ import dolfin as df
 mpi_rank =  df.MPI.rank(df.mpi_comm_world())
 mpi_size =  df.MPI.size(df.mpi_comm_world())
 
+# convenience variable
+is_master = mpi_rank == 0
 
 class Create(object):
     def __init__(self, filename, functionspace):
+
         self.functionspace = functionspace
         self.h5filename = filename + '.h5'
         self.jsonfilename = filename + '.json'
