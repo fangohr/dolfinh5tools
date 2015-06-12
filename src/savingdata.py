@@ -3,6 +3,9 @@ from collections import OrderedDict
 
 import dolfin as df
 
+mpi_rank =  df.MPI.rank(df.mpi_comm_world())
+mpi_size =  df.MPI.size(df.mpi_comm_world())
+
 
 class Create(object):
     def __init__(self, filename, functionspace):
@@ -46,10 +49,8 @@ class Create(object):
             self.fieldsDict[field_name]['metadata']['type'] = 'scalar'
 
         # Adding some debug data
-        self.fieldsDict[field_name]['metadata']['mpi-size'] = \
-            df.MPI.size(df.mpi_comm_world())
-        self.fieldsDict[field_name]['metadata']['mpi-rank'] = \
-            df.MPI.rank(df.mpi_comm_world())
+        self.fieldsDict[field_name]['metadata']['mpi-size'] = mpi_size
+        self.fieldsDict[field_name]['metadata']['mpi-rank'] = mpi_rank
 
         self.dump_metadata(self.jsonfilename, self.fieldsDict)
 
