@@ -45,12 +45,12 @@ def test_saved():
     # assert times from keys
     for i, t in enumerate(t_array):
         name = "f{}".format(i)
-        jsonTime = jsonData['f'][name]
+        jsonTime = jsonData['f']['data'][name]
         assert(jsonTime == t)
 
     # assert times by iterating through values (as they should be ordered)
     index = 0
-    for jsonTime in jsonData['f'].itervalues():
+    for jsonTime in jsonData['f']['data'].itervalues():
          assert(jsonTime == t_array[index])
          index += 1
 
