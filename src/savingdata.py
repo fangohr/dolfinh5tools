@@ -45,7 +45,7 @@ class SavingData(object):
     def dump_metadata(self, filename, data):
         # create json file
         with open(filename, 'w') as jsonfile:
-            json.dump(data, jsonfile)
+            json.dump(data, jsonfile, indent=True)
         jsonfile.close()
 
 
