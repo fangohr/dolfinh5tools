@@ -15,9 +15,8 @@ class SavingData(object):
         self.field_index = 0
         self.t_array = []
 
-        self.fieldsDict = {} # dictionary of all field types e.g. 'm', 'H_eff'
+        self.fieldsDict = {}
 
-        # create json file
         with open(self.jsonfilename, 'w') as jsonfile:
             json.dump(self.fieldsDict, jsonfile, sort_keys=False)
         jsonfile.close()
