@@ -15,9 +15,8 @@ class SavingData(object):
         self.field_index = 0
         self.t_array = []
 
-        self.fieldsDict = {} # dictionary of all field types e.g. 'm', 'H_eff'
+        self.fieldsDict = {}
 
-        # create json file
         with open(self.jsonfilename, 'w') as jsonfile:
             json.dump(self.fieldsDict, jsonfile)
         jsonfile.close()
@@ -33,10 +32,13 @@ class SavingData(object):
 
         if not self.fieldsDict.has_key(field_name):
             self.fieldsDict[field_name] = OrderedDict()
+            self.fieldsDict[field_name]['data'] = {}
+            self.fieldsDict[field_name]['metadata'] = {}
 
-        self.fieldsDict[field_name][name] = t
-        self.fieldsDict['fs_family'] = self.functionspace.ufl_element().family()
-        self.fieldsDict['dim'] = self.functionspace.ufl_element().value_shape()[0]
+        self.fieldsDict[field_name]['data'][name] = t
+        self.fieldsDict[field_name]['metadata']['family'] = self.functionspace.ufl_element().family()
+        self.fieldsDict[field_name]['metadata']['degree'] = self.functionspace.ufl_element().degree()
+        self.fieldsDict[field_name]['metadata']['dim'] = self.functionspace.ufl_element().value_shape()[0]
 
         with open(self.jsonfilename, 'w') as jsonfile:
             json.dump(self.fieldsDict, jsonfile)
@@ -55,18 +57,6 @@ class LoadingData(object):
 
         self.h5file = df.HDF5File(df.mpi_comm_world(), self.h5filename, 'r')
 
-        with open(self.jsonfilename) as jsonfile:
-            fieldsDict = json.load(jsonfile, object_pairs_hook=OrderedDict)
-        jsonfile.close()
-
-        self.mesh = self.load_mesh()
-
-        self.fs_family = fieldsDict['fs_family']
-        self.dim = fieldsDict['dim']
-        
-        self.functionspace = df.VectorFunctionSpace(self.mesh, self.fs_family,
-                                                    1, self.dim)
-
     def load_mesh(self, name='mesh'):
         mesh_loaded = df.Mesh()
 
@@ -79,7 +69,16 @@ class LoadingData(object):
             fieldsDict = json.load(jsonfile, object_pairs_hook=OrderedDict)
         jsonfile.close()
 
-        name = str([item[0] for item in fieldsDict[field_name].items() if item[1]==t][0])
+        self.mesh = self.load_mesh()
+
+        self.family = fieldsDict[field_name]['metadata']['family']
+        self.degree = fieldsDict[field_name]['metadata']['degree']
+        self.dim = fieldsDict[field_name]['metadata']['dim']
+        
+        self.functionspace = df.VectorFunctionSpace(self.mesh, self.family,
+                                                    self.degree, self.dim)
+
+        name = str([item[0] for item in fieldsDict[field_name]['data'].items() if item[1]==t][0])
         
         f_loaded = df.Function(self.functionspace)
         
