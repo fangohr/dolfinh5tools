@@ -39,6 +39,10 @@ class SavingData(object):
         self.fieldsDict[field_name]['metadata']['family'] = self.functionspace.ufl_element().family()
         self.fieldsDict[field_name]['metadata']['degree'] = self.functionspace.ufl_element().degree()
         self.fieldsDict[field_name]['metadata']['dim'] = self.functionspace.ufl_element().value_shape()[0]
+        if isinstance(self.functionspace, df.VectorFunctionSpace):
+            self.fieldsDict[field_name]['metadata']['type'] = 'vector'
+        elif isinstance(self.functionspace, df.FunctionSpace):
+            self.fieldsDict[field_name]['metadata']['type'] = 'scalar'
 
         with open(self.jsonfilename, 'w') as jsonfile:
             json.dump(self.fieldsDict, jsonfile, sort_keys=False)
@@ -74,9 +78,13 @@ class LoadingData(object):
         self.family = fieldsDict[field_name]['metadata']['family']
         self.degree = fieldsDict[field_name]['metadata']['degree']
         self.dim = fieldsDict[field_name]['metadata']['dim']
+        self.fs_type = fieldsDict[field_name]['metadata']['type']
         
-        self.functionspace = df.VectorFunctionSpace(self.mesh, self.family,
-                                                    self.degree, self.dim)
+        if self.fs_type == 'vector':
+            self.functionspace = df.VectorFunctionSpace(self.mesh, self.family,
+                                                        self.degree, self.dim)
+        elif self.fs_type == 'scalar':
+            self.functionspace = df.FunctionSpace(self.mesh, self.family, self.degree)
 
         name = str([item[0] for item in fieldsDict[field_name]['data'].items() if item[1]==t][0])
         
