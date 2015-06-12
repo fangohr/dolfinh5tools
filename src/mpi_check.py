@@ -18,5 +18,5 @@ for t in t_array:
     f.assign(df.Constant((1+t, 2, 3)))
     f_loaded = ld.load_field('f', t)
 
-    assert np.all(f.vector().array() == f_loaded.vector().array())
+    assert df.assemble(f[0]*df.dx) == df.assemble(f_loaded[0]*df.dx)
 ld.close()
