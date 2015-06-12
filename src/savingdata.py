@@ -1,8 +1,6 @@
 import json
 from collections import OrderedDict
 
-import numpy as np
-
 import dolfin as df
 
 class SavingData(object):
