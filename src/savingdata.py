@@ -37,6 +37,7 @@ class SavingData(object):
 
         self.fieldsDict[field_name]['data'][name] = t
         self.fieldsDict[field_name]['metadata']['family'] = self.functionspace.ufl_element().family()
+        self.fieldsDict[field_name]['metadata']['degree'] = self.functionspace.ufl_element().degree()
         self.fieldsDict[field_name]['metadata']['dim'] = self.functionspace.ufl_element().value_shape()[0]
 
         with open(self.jsonfilename, 'w') as jsonfile:
@@ -71,10 +72,11 @@ class LoadingData(object):
         self.mesh = self.load_mesh()
 
         self.family = fieldsDict[field_name]['metadata']['family']
+        self.degree = fieldsDict[field_name]['metadata']['degree']
         self.dim = fieldsDict[field_name]['metadata']['dim']
         
         self.functionspace = df.VectorFunctionSpace(self.mesh, self.family,
-                                                    1, self.dim)
+                                                    self.degree, self.dim)
 
         name = str([item[0] for item in fieldsDict[field_name]['data'].items() if item[1]==t][0])
         
