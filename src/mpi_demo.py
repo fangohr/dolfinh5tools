@@ -1,6 +1,3 @@
-import json
-from collections import OrderedDict
-
 import numpy as np
 import dolfin as df
 
@@ -16,7 +13,7 @@ t_array = np.linspace(0, 1e-9, 5)
 sd = Create(filename, functionspace)
 sd.save_mesh()
 for i in range(len(t_array)):
-    f.assign(df.Constant((1,2,3)))
+    f.assign(df.Constant((1, 2, 3)))
     sd.save_field(f, 'f', t_array[i])
 sd.close()
 
