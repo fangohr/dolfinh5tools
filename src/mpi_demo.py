@@ -7,7 +7,7 @@ mesh = df.UnitSquareMesh(10, 10)
 filename = 'file_vector'
 functionspace = df.VectorFunctionSpace(mesh, 'CG', 1, 3)
 f = df.Function(functionspace)
-t_array = np.linspace(0, 1e-9, 5)
+t_array = np.linspace(0, 1, 5)
 
 # Save data.
 sd = Create(filename, functionspace)
