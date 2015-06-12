@@ -15,7 +15,7 @@ class SavingData(object):
         self.field_index = 0
         self.t_array = []
 
-        self.fieldsDict = {}
+        self.fieldsDict = OrderedDict()
 
         self.dump_metadata(self.jsonfilename, self.fieldsDict)
 
@@ -29,8 +29,8 @@ class SavingData(object):
 
         if field_name not in self.fieldsDict:
             self.fieldsDict[field_name] = OrderedDict()
-            self.fieldsDict[field_name]['data'] = {}
-            self.fieldsDict[field_name]['metadata'] = {}
+            self.fieldsDict[field_name]['data'] = OrderedDict()
+            self.fieldsDict[field_name]['metadata'] = OrderedDict()
 
         self.fieldsDict[field_name]['data'][name] = t
         self.fieldsDict[field_name]['metadata']['family'] = \
