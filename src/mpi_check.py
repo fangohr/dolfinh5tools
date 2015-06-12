@@ -1,3 +1,6 @@
+import json
+from collections import OrderedDict
+
 import numpy as np
 import dolfin as df
 
@@ -9,16 +12,11 @@ functionspace = df.VectorFunctionSpace(mesh, 'CG', 1, 3)
 f = df.Function(functionspace)
 t_array = np.linspace(0, 1e-9, 5)
 
-# Save data.
-sd = Create(filename, functionspace)
-sd.save_mesh()
-for i in range(len(t_array)):
-    f.assign(df.Constant((1 + t_array[i], 2, 3)))
-    sd.save_field(f, 'f', t_array[i])
-#sd.close()
-
 # Load data.
 ld = Read(filename)
 for t in t_array:
+    f.assign(df.Constant((1+t, 2, 3)))
     f_loaded = ld.load_field('f', t)
-#ld.close()
+
+    assert np.all(f.vector().array() == f_loaded.vector().array())
+ld.close()
