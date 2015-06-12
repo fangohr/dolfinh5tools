@@ -38,9 +38,9 @@ class SavingData(object):
         self.fieldsDict[field_name]['data'][name] = t
         self.fieldsDict[field_name]['metadata']['family'] = self.functionspace.ufl_element().family()
         self.fieldsDict[field_name]['metadata']['degree'] = self.functionspace.ufl_element().degree()
-        self.fieldsDict[field_name]['metadata']['dim'] = self.functionspace.ufl_element().value_shape()[0]
         if isinstance(self.functionspace, df.VectorFunctionSpace):
             self.fieldsDict[field_name]['metadata']['type'] = 'vector'
+            self.fieldsDict[field_name]['metadata']['dim'] = self.functionspace.ufl_element().value_shape()[0]
         elif isinstance(self.functionspace, df.FunctionSpace):
             self.fieldsDict[field_name]['metadata']['type'] = 'scalar'
 
