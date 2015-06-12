@@ -111,7 +111,6 @@ class Read(object):
 
         f_loaded = df.Function(self.functionspace)
 
-        # This line causes segmentation fault.
         self.h5file.read(f_loaded, name)
 
         return f_loaded
