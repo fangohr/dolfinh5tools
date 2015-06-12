@@ -15,10 +15,10 @@ sd.save_mesh()
 for i in range(len(t_array)):
     f.assign(df.Constant((1 + t_array[i], 2, 3)))
     sd.save_field(f, 'f', t_array[i])
-#sd.close()
+sd.close()
 
 # Load data.
 ld = Read(filename)
 for t in t_array:
     f_loaded = ld.load_field('f', t)
-#ld.close()
+ld.close()
