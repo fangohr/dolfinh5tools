@@ -3,14 +3,20 @@ from collections import OrderedDict
 
 import dolfin as df
 
+mpi_rank =  df.MPI.rank(df.mpi_comm_world())
+mpi_size =  df.MPI.size(df.mpi_comm_world())
+
+# convenience variable
+is_master = mpi_rank == 0
 
 class Create(object):
     def __init__(self, filename, functionspace):
+
         self.functionspace = functionspace
         self.h5filename = filename + '.h5'
         self.jsonfilename = filename + '.json'
 
-        print("Debug: creating file {}".format(self.h5filename))
+        print("Debug: ({}/{}) opening file {}".format(mpi_rank, mpi_size, self.h5filename))
         self.h5file = df.HDF5File(df.mpi_comm_world(), self.h5filename, 'w')
 
         self.field_index = 0
@@ -46,20 +52,20 @@ class Create(object):
             self.fieldsDict[field_name]['metadata']['type'] = 'scalar'
 
         # Adding some debug data
-        self.fieldsDict[field_name]['metadata']['mpi-size'] = \
-            df.MPI.size(df.mpi_comm_world())
-        self.fieldsDict[field_name]['metadata']['mpi-rank'] = \
-            df.MPI.rank(df.mpi_comm_world())
+        self.fieldsDict[field_name]['metadata']['mpi-size'] = mpi_size
+        self.fieldsDict[field_name]['metadata']['mpi-rank'] = mpi_rank
 
         self.dump_metadata(self.jsonfilename, self.fieldsDict)
 
         self.field_index += 1
 
     def dump_metadata(self, filename, data):
-        # create json file
-        with open(filename, 'w') as jsonfile:
-            json.dump(data, jsonfile, indent=True)
-        jsonfile.close()
+        # create json file (only master)
+        if is_master:
+            print("Debug: ({}/{}) writing json file {}".format(mpi_rank, mpi_size, filename))
+            with open(filename, 'w') as jsonfile:
+                json.dump(data, jsonfile, indent=True)
+            jsonfile.close()
 
     def close(self):
         self.h5file.close()
@@ -105,7 +111,6 @@ class Read(object):
 
         f_loaded = df.Function(self.functionspace)
 
-        # This line causes segmentation fault.
         self.h5file.read(f_loaded, name)
 
         return f_loaded
