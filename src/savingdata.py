@@ -27,7 +27,7 @@ class SavingData(object):
         self.h5file.write(f, name)
         self.t_array.append(t)
 
-        if not self.fieldsDict.has_key(field_name):
+        if field_name not in self.fieldsDict:
             self.fieldsDict[field_name] = OrderedDict()
             self.fieldsDict[field_name]['data'] = {}
             self.fieldsDict[field_name]['metadata'] = {}
