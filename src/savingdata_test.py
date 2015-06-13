@@ -1,3 +1,4 @@
+import os
 import json
 from collections import OrderedDict
 
@@ -92,4 +93,12 @@ def test_saved():
          assert(jsonTime == t_array[index])
          index += 1
 
+#def test_mpi():
+#    for i in range(5):
+#        np_write = np.random.randint(1, 9)
+#        np_read = np.random.randint(1, 9)
 
+#        print 'Writing with ' + str(np_write) + ' and reading with ' + \
+#            str(np_read) + ' cores.'
+#        os.system('mpirun -np ' + str(np_write) + ' python mpi_demo.py')
+#        os.system('mpirun -np ' + str(np_read) + ' python mpi_check.py')
