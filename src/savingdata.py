@@ -85,6 +85,15 @@ class Read(object):
 
         return mesh_loaded
 
+    def get_times(self, field_name):
+        with open(self.jsonfilename) as jsonfile:
+            fieldsDict = json.load(jsonfile, object_pairs_hook=OrderedDict)
+        jsonfile.close()
+        t_list = []
+        for item in fieldsDict[field_name]['data'].items():
+            t_list.append(item[1])
+        return t_list
+
     def load_field(self, field_name, t):
         with open(self.jsonfilename) as jsonfile:
             fieldsDict = json.load(jsonfile, object_pairs_hook=OrderedDict)
