@@ -1,5 +1,6 @@
 import os
 import json
+import subprocess
 from collections import OrderedDict
 
 import numpy as np
@@ -94,11 +95,10 @@ def test_saved():
          index += 1
 
 def test_mpi():
-    for i in range(3):
-        np_write = np.random.randint(1, 9)
-        np_read = np.random.randint(1, 9)
-
-        print 'Writing with ' + str(np_write) + ' and reading with ' + \
-            str(np_read) + ' cores.'
-        os.system('mpirun -np ' + str(np_write) + ' python mpi_demo.py')
-        os.system('mpirun -np ' + str(np_read) + ' python mpi_check.py')
+    for i in range(1, 7):
+        for j in range(1, 7):
+            print 'Writing with ' + str(i) + ' and reading with ' + \
+                str(j) + ' cores.'
+            os.system('mpirun -np ' + str(i) + ' python mpi_demo.py')
+            subprocess.check_call('mpirun -np ' + str(j) + ' python mpi_check.py',
+                                  shell=True)
