@@ -15,8 +15,9 @@ for t in t_array:
     f.assign(df.Constant((1 + t, 2, 3)))
     f_loaded = ld.load_field('f', t)
 
-    print df.assemble(f[0]*df.dx)
-    print df.assemble(f_loaded[0]*df.dx)
-    assert df.assemble(f[0]*df.dx) == df.assemble(f_loaded[0]*df.dx)
+    print "%1.50f" % df.assemble(f[0]*df.dx)
+    print "%1.50f" % df.assemble(f_loaded[0]*df.dx)
+    print "%1.50f" % (df.assemble(f[0]*df.dx) - df.assemble(f_loaded[0]*df.dx))
+    assert np.abs(df.assemble(f[0]*df.dx) - df.assemble(f_loaded[0]*df.dx)) < 1e-14
     print '------------'
 ld.close()
