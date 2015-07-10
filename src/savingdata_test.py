@@ -59,6 +59,9 @@ def test_load_vector_data():
 
     ld.close()
 
+    os.system('rm file_vector.h5')
+    os.system('rm file_vector.json')
+
 
 def test_load_scalar_data():
     filename = 'file_scalar'
@@ -74,6 +77,8 @@ def test_load_scalar_data():
         assert np.all(f.vector().array() == f_loaded.vector().array())
 
     ld.close()
+
+    os.system('rm file_scalar.h5')
 
 
 def test_saved():
@@ -93,12 +98,15 @@ def test_saved():
     for jsonTime in jsonData['f']['data'].itervalues():
          assert(jsonTime == t_array[index])
          index += 1
+    os.system('rm file_scalar.json')
 
 def test_mpi():
-    for i in range(1, 7):
-        for j in range(1, 7):
+    for i in range(1, 6):
+        for j in range(1, 6):
             print 'Writing with ' + str(i) + ' and reading with ' + \
                 str(j) + ' cores.'
             os.system('mpirun -np ' + str(i) + ' python mpi_demo.py')
             subprocess.check_call('mpirun -np ' + str(j) + ' python mpi_check.py',
                                   shell=True)
+    os.system('rm file_mpi.h5')
+    os.system('rm file_mpi.json')
