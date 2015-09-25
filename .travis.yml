@@ -1,7 +1,7 @@
 language: python
 python:
         - "2.7"
-before_install:
+install:
         - sudo add-apt-repository ppa:fenics-packages/fenics -y
         - sudo apt-get update -q
         - sudo apt-get install fenics
