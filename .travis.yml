@@ -6,5 +6,6 @@ install:
         - sudo apt-get update -q
         - sudo apt-get install fenics
 script:
+        - export PYTHONPATH="/usr/lib/python2.7/dist-packages/dolfin:$PYTHONPATH"
         - ls /usr/lib/python2.7/dist-packages/dolfin
         - py.test
