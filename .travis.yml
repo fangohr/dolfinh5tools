@@ -4,6 +4,6 @@ python:
 before_script:
         - sudo add-apt-repository ppa:fenics-packages/fenics -y
         - sudo apt-get update -q
-        - sudo apt-get install fenics -y
+        - sudo apt-get install fenics
 script:
         - py.test
