@@ -3,8 +3,8 @@ python:
         - "2.7"
 install:
         - sudo add-apt-repository ppa:fenics-packages/fenics -y
-        - sudo apt-get update -q
-        - sudo apt-get install fenics
+        - sudo apt-get update -qq
+        - sudo apt-get install -qq fenics
 script:
         - export PYTHONPATH="/usr/lib/python2.7/dist-packages/dolfin:$PYTHONPATH"
         - ls /usr/lib/python2.7/dist-packages/dolfin
