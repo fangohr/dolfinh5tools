@@ -10,4 +10,4 @@ virtualenv:
 script:
         - export PYTHONPATH="/usr/lib/python2.7/dist-packages/dolfin:$PYTHONPATH"
         - ls /usr/lib/python2.7/dist-packages/dolfin
-        - py.test
+        - make test
