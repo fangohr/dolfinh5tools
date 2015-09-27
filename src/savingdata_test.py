@@ -101,8 +101,8 @@ def test_saved():
     os.system('rm file_scalar.json')
 
 def test_mpi():
-    for i in range(1, 6):
-        for j in range(1, 6):
+    for i in range(1, 3):
+        for j in range(1, 3):
             print 'Writing with ' + str(i) + ' and reading with ' + \
                 str(j) + ' cores.'
             os.system('mpirun -np ' + str(i) + ' python mpi_demo.py')
