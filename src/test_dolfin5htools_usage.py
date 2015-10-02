@@ -1,10 +1,7 @@
-import pytest
-
 def test_field2_has_more_timesteps_than_field1():
     pass
 
 
-@pytest.skip
 def test_reading():
 
     h5file = h5tools.open(filename)
