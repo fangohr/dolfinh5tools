@@ -55,6 +55,8 @@ def test_field2_has_more_timesteps_than_field1():
         for t in h5file.times(field):
             h5file.read(t_array[1], field)
 
+    os.system('rm file_usage_diff.h5')
+    os.system('rm file_usage_diff.json')
 
 def test_reading_usage():
     filename = 'file_usage'
@@ -70,6 +72,8 @@ def test_reading_fixed_field_usage():
     for t in h5file.times():
         _ = h5file.read(t)
 
+    os.system('rm file_usage.h5')
+    os.system('rm file_usage.json')
 
 def test_save_vector_field_data():
     filename = 'file_vector'
