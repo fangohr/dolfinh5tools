@@ -14,5 +14,5 @@ sd = Create(filename, functionspace)
 sd.save_mesh()
 for t in t_array:
     f.assign(df.Constant((1 + t, 2, 3)))
-    sd.save_field(f, 'f', t)
+    sd.write(f, 'f', t)
 sd.close()

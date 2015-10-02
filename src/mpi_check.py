@@ -13,7 +13,7 @@ t_array = np.linspace(0, 1, 5)
 ld = Read(filename)
 for t in t_array:
     f.assign(df.Constant((1 + t, 2, 3)))
-    f_loaded = ld.load_field('f', t)
+    f_loaded = ld.read(t, 'f')
 
     print "%1.50f" % df.assemble(f[0]*df.dx)
     print "%1.50f" % df.assemble(f_loaded[0]*df.dx)

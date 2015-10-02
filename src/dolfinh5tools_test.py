@@ -11,6 +11,45 @@ from dolfinh5tools import Create, Read
 mesh = df.UnitSquareMesh(10, 10)
 t_array = np.linspace(0, 1e-9, 5)
 
+
+def test_writing_usage():
+    filename = 'file_usage'
+    functionspace = df.VectorFunctionSpace(mesh, 'CG', 1, 3)
+    f1 = df.Function(functionspace)
+    f2 = df.Function(functionspace)
+
+    h5file = Create(filename, functionspace)
+
+    h5file.save_mesh()
+
+    for t in t_array:
+        f1.assign(df.Constant((t, 0, 0)))
+        f2.assign(df.Constant((t, 1, 0)))
+        
+        h5file.write(f1, 'f1', t)
+        h5file.write(f1, 'f2', t)
+
+
+def test_field2_has_more_timesteps_than_field1():
+    pass
+
+
+def test_reading_usage():
+    filename = 'file_usage'
+    h5file = Read(filename)
+    print h5file.fields()
+    for field in h5file.fields():
+        for t in h5file.times(field):
+            h5file.read(t_array[1], 'f1')
+
+
+def test_reading_fixed_field_usage():
+    filename = 'file_usage'
+    h5file = Read(filename, field_name='f1')
+    for t in h5file.times():
+        _ = h5file.read(t)
+
+
 def test_save_vector_field_data():
     filename = 'file_vector'
     functionspace = df.VectorFunctionSpace(mesh, 'CG', 1, 3)
@@ -23,9 +62,10 @@ def test_save_vector_field_data():
     for i in range(len(t_array)):
         f.assign(df.Constant((t_array[i], 0, 0)))
     
-        sd.save_field(f, 'f', t_array[i])
+        sd.write(f, 'f', t_array[i])
 
     sd.close()
+
 
 def test_save_scalar_field_data():
     filename = 'file_scalar'
@@ -39,7 +79,7 @@ def test_save_scalar_field_data():
     for i in range(len(t_array)):
         f.assign(df.Constant(t_array[i]))
     
-        sd.save_field(f, 'f', t_array[i])
+        sd.write(f, 'f', t_array[i])
 
     sd.close()
 
@@ -52,7 +92,7 @@ def test_load_vector_data():
     ld = Read(filename)
 
     for t in t_array:
-        f_loaded = ld.load_field('f', t)
+        f_loaded = ld.read(t, 'f')
 
         f.assign(df.Constant((t, 0, 0)))
         assert np.all(f.vector().array() == f_loaded.vector().array())
@@ -71,7 +111,7 @@ def test_load_scalar_data():
     ld = Read(filename)
 
     for t in t_array:
-        f_loaded = ld.load_field('f', t)
+        f_loaded = ld.read(t, 'f')
 
         f.assign(df.Constant(t))
         assert np.all(f.vector().array() == f_loaded.vector().array())
@@ -100,6 +140,7 @@ def test_saved():
          index += 1
     os.system('rm file_scalar.json')
 
+
 def test_mpi():
     for i in range(1, 4):
         for j in range(1, 4):
@@ -110,3 +151,5 @@ def test_mpi():
                                   shell=True)
     os.system('rm file_mpi.h5')
     os.system('rm file_mpi.json')
+
+
