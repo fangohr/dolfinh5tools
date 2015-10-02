@@ -1,2 +1,2 @@
-- [ ] add tests for multiple functions in each file
+- [ ] add tests for multiple dolfinfunctions(=fields) saved in each file
 - [ ] add tests for retrieving non-existent times
