@@ -85,6 +85,24 @@ class Read(object):
 
         return mesh_loaded
 
+    def get_fields(self):
+        with open(self.jsonfilename) as jsonfile:
+            fieldsDict = json.load(jsonfile, object_pairs_hook=OrderedDict)
+        jsonfile.close()
+        fields_list = []
+        for item in fieldsDict.items():
+            fields_list.append(item[0])
+        return fields_list
+
+    def get_times(self, field_name):
+        with open(self.jsonfilename) as jsonfile:
+            fieldsDict = json.load(jsonfile, object_pairs_hook=OrderedDict)
+        jsonfile.close()
+        t_list = []
+        for item in fieldsDict[field_name]['data'].items():
+            t_list.append(item[1])
+        return t_list
+
     def load_field(self, field_name, t):
         with open(self.jsonfilename) as jsonfile:
             fieldsDict = json.load(jsonfile, object_pairs_hook=OrderedDict)
@@ -101,13 +119,11 @@ class Read(object):
             self.functionspace = df.VectorFunctionSpace(self.mesh, self.family,
                                                         self.degree, self.dim)
         elif self.fs_type == 'scalar':
-            print self.family, self.degree
-            print type(self.family)
             self.functionspace = df.FunctionSpace(self.mesh, str(self.family),
                                                   self.degree)
 
         name = str([item[0] for item in fieldsDict[field_name]['data'].items()
-                    if item[1] == t][0])
+                    if abs(item[1] - t) < 1e-10][0])
 
         f_loaded = df.Function(self.functionspace)
 
