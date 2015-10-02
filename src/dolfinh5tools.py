@@ -139,3 +139,9 @@ class Read(object):
 
     def close(self):
         self.h5file.close()
+
+def openh5(filename, functionspace=None, field_name=None, mode='w'):
+    if mode == 'w':
+        return Create(filename, functionspace)
+    elif mode == 'r':
+        return Read(filename, field_name)

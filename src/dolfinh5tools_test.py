@@ -6,7 +6,7 @@ from collections import OrderedDict
 import numpy as np
 import dolfin as df
 
-from dolfinh5tools import Create, Read
+from dolfinh5tools import openh5
 
 mesh = df.UnitSquareMesh(10, 10)
 t_array = np.linspace(0, 1e-9, 5)
@@ -18,7 +18,7 @@ def test_writing_usage():
     f1 = df.Function(functionspace)
     f2 = df.Function(functionspace)
 
-    h5file = Create(filename, functionspace)
+    h5file = openh5(filename, functionspace, mode='w')
 
     h5file.save_mesh()
 
@@ -36,7 +36,7 @@ def test_field2_has_more_timesteps_than_field1():
     f1 = df.Function(functionspace)
     f2 = df.Function(functionspace)
 
-    h5file = Create(filename, functionspace)
+    h5file = openh5(filename, functionspace, mode='w')
 
     h5file.save_mesh()
 
@@ -49,7 +49,7 @@ def test_field2_has_more_timesteps_than_field1():
     f2.assign(df.Constant((50, 1, 0)))
     h5file.write(f2, 'f2', t)
 
-    h5file = Read(filename)
+    h5file = openh5(filename, mode='r')
     print h5file.fields()
     for field in h5file.fields():
         for t in h5file.times(field):
@@ -58,8 +58,7 @@ def test_field2_has_more_timesteps_than_field1():
 
 def test_reading_usage():
     filename = 'file_usage'
-    h5file = Read(filename)
-    print h5file.fields()
+    h5file = openh5(filename, mode='r')
     for field in h5file.fields():
         for t in h5file.times(field):
             h5file.read(t_array[1], field)
@@ -67,7 +66,7 @@ def test_reading_usage():
 
 def test_reading_fixed_field_usage():
     filename = 'file_usage'
-    h5file = Read(filename, field_name='f1')
+    h5file = openh5(filename, field_name='f1', mode='r')
     for t in h5file.times():
         _ = h5file.read(t)
 
@@ -77,7 +76,7 @@ def test_save_vector_field_data():
     functionspace = df.VectorFunctionSpace(mesh, 'CG', 1, 3)
     f = df.Function(functionspace)
 
-    sd = Create(filename, functionspace)
+    sd = openh5(filename, functionspace, mode='w')
 
     sd.save_mesh()
 
@@ -94,7 +93,7 @@ def test_save_scalar_field_data():
     functionspace = df.FunctionSpace(mesh, 'CG', 1)
     f = df.Function(functionspace)
 
-    sd = Create(filename, functionspace)
+    sd = openh5(filename, functionspace, mode='w')
 
     sd.save_mesh()
 
@@ -111,7 +110,7 @@ def test_load_vector_data():
     functionspace = df.VectorFunctionSpace(mesh, 'CG', 1, 3)
     f = df.Function(functionspace)
 
-    ld = Read(filename)
+    ld = openh5(filename, mode='r')
 
     for t in t_array:
         f_loaded = ld.read(t, 'f')
@@ -130,7 +129,7 @@ def test_load_scalar_data():
     functionspace = df.FunctionSpace(mesh, 'CG', 1)
     f = df.Function(functionspace)
 
-    ld = Read(filename)
+    ld = openh5(filename, mode='r')
 
     for t in t_array:
         f_loaded = ld.read(t, 'f')
