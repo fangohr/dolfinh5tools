@@ -27,11 +27,33 @@ def test_writing_usage():
         f2.assign(df.Constant((t, 1, 0)))
         
         h5file.write(f1, 'f1', t)
-        h5file.write(f1, 'f2', t)
+        h5file.write(f2, 'f2', t)
 
 
 def test_field2_has_more_timesteps_than_field1():
-    pass
+    filename = 'file_usage_diff'
+    functionspace = df.VectorFunctionSpace(mesh, 'CG', 1, 3)
+    f1 = df.Function(functionspace)
+    f2 = df.Function(functionspace)
+
+    h5file = Create(filename, functionspace)
+
+    h5file.save_mesh()
+
+    for t in t_array:
+        f1.assign(df.Constant((t, 0, 0)))
+        f2.assign(df.Constant((t, 1, 0)))
+        
+        h5file.write(f1, 'f1', t)
+        h5file.write(f2, 'f2', t)
+    f2.assign(df.Constant((50, 1, 0)))
+    h5file.write(f2, 'f2', t)
+
+    h5file = Read(filename)
+    print h5file.fields()
+    for field in h5file.fields():
+        for t in h5file.times(field):
+            h5file.read(t_array[1], field)
 
 
 def test_reading_usage():
@@ -40,7 +62,7 @@ def test_reading_usage():
     print h5file.fields()
     for field in h5file.fields():
         for t in h5file.times(field):
-            h5file.read(t_array[1], 'f1')
+            h5file.read(t_array[1], field)
 
 
 def test_reading_fixed_field_usage():
