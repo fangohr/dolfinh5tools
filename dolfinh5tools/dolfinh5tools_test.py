@@ -6,7 +6,7 @@ from collections import OrderedDict
 import numpy as np
 import dolfin as df
 
-from dolfinh5tools import openh5
+from lib import openh5
 
 mesh = df.UnitSquareMesh(10, 10)
 t_array = np.linspace(0, 1e-9, 5)
