@@ -1,2 +1,2 @@
 test:
-	cd src && py.test -v 
+	cd dolfinh5tools && py.test -v 
