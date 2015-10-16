@@ -1,7 +1,7 @@
 import numpy as np
 import dolfin as df
 
-from dolfinh5tools import openh5
+from lib import openh5
 
 mesh = df.UnitSquareMesh(10, 10)
 filename = 'file_mpi'
