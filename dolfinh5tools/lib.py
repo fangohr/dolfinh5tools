@@ -44,7 +44,7 @@ class Create(object):
             self.functionspace.ufl_element().family()
         self.fieldsDict[field_name]['metadata']['degree'] = \
             self.functionspace.ufl_element().degree()
-        if isinstance(self.functionspace, df.VectorFunctionSpace):
+        if isinstance(self.functionspace, df.FunctionSpace) and self.functionspace.num_sub_spaces() > 0:
             self.fieldsDict[field_name]['metadata']['type'] = 'vector'
             self.fieldsDict[field_name]['metadata']['dim'] = \
                 self.functionspace.ufl_element().value_shape()[0]
