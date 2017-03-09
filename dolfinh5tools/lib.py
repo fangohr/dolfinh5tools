@@ -44,7 +44,7 @@ class Create(object):
             self.functionspace.ufl_element().family()
         self.fieldsDict[field_name]['metadata']['degree'] = \
             self.functionspace.ufl_element().degree()
-        if df.__version__ == '2016.1.0':
+        if df.__version__ >= '2016.1.0':
             print df.__version__
             condition = isinstance(self.functionspace, df.FunctionSpace) and \
                         self.functionspace.num_sub_spaces() > 0
